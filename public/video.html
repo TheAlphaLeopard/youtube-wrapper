@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        iframe {
+            width: 640px;
+            height: 360px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="videoTitle">Loading...</h1>
+    <iframe id="videoFrame" frameborder="0" allowfullscreen></iframe>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id');
+
+        const socket = io();
+        socket.emit('getVideoDetails', videoId);
+
+        socket.on('videoDetails', (videoDetails) => {
+            document.getElementById('videoTitle').innerText = videoDetails.title;
+            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}`;
+        });
+
+        socket.on('downloadError', (message) => {
+            document.getElementById('videoTitle').innerText = 'Error loading video';
+            console.error(message);
+        });
+    </script>
+</body>
+</html>
