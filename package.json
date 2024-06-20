@@ -3,6 +3,7 @@
     "express": "^4.19.2",
     "node.js": "^0.0.1-security",
     "socket.io": "^4.7.5",
+    "youtube-api": "^3.0.1",
     "youtube-dl-exec": "^3.0.3"
   }
 }
