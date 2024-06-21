@@ -10,7 +10,7 @@
             text-align: center;
             margin-top: 50px;
         }
-        iframe {
+        video {
             width: 640px;
             height: 360px;
             margin-top: 20px;
@@ -22,24 +22,31 @@
 </head>
 <body>
     <h1 id="videoTitle">Loading...</h1>
-    <iframe id="videoFrame" frameborder="0" allowfullscreen></iframe>
+    <video id="videoPlayer" controls></video>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const videoId = urlParams.get('id');
+        const videoUrl = urlParams.get('url');
 
         const socket = io();
-        socket.emit('getVideoDetails', videoId);
+        let videoFilename = null;
+
+        socket.emit('downloadVideo', videoUrl);
 
         socket.on('videoDetails', (videoDetails) => {
             document.getElementById('videoTitle').innerText = videoDetails.title;
-            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}`;
+            videoFilename = videoDetails.filename;
+            document.getElementById('videoPlayer').src = `/videos/${videoFilename}`;
         });
 
         socket.on('downloadError', (message) => {
             document.getElementById('videoTitle').innerText = 'Error loading video';
             console.error(message);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            socket.emit('deleteVideo', videoFilename);
         });
     </script>
 </body>

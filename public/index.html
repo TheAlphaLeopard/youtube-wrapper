@@ -7,36 +7,70 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-        .video-link {
-            display: block;
-            margin: 20px;
-            font-size: 20px;
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+            width: 80%;
+        }
+        .video-card {
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .video-card:hover {
+            transform: scale(1.05);
+        }
+        .video-card img {
+            width: 100%;
+            height: auto;
+        }
+        .video-card a {
             text-decoration: none;
-            color: blue;
+            color: #333;
+            font-size: 18px;
+            display: block;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>YouTube Wrapper</h1>
-    <div id="videoLinks"></div>
+    <div class="container" id="videoLinks"></div>
 
     <script>
         const videoLinks = [
-            { title: "Video 1", id: "dQw4w9WgXcQ" },
-            { title: "Video 2", id: "9bZkp7q19f0" },
-            { title: "Video 3", id: "3JZ_D3ELwOQ" }
+            { title: "Video 1", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+            { title: "Video 2", url: "https://www.youtube.com/watch?v=9bZkp7q19f0" },
+            { title: "Video 3", url: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ" },
+            { title: "Video 4", url: "https://www.youtube.com/watch?v=L_jWHffIx5E" },
+            { title: "Video 5", url: "https://www.youtube.com/watch?v=ktvTqknDobU" },
+            { title: "Video 6", url: "https://www.youtube.com/watch?v=RgKAFK5djSk" }
         ];
 
         const videoLinksContainer = document.getElementById('videoLinks');
         videoLinks.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            
+            const thumbnail = document.createElement('img');
+            thumbnail.src = 'placeholder.png'; // Placeholder image for thumbnails
+            card.appendChild(thumbnail);
+            
             const link = document.createElement('a');
-            link.href = `/video.html?id=${video.id}`;
-            link.className = 'video-link';
+            link.href = `/video.html?url=${encodeURIComponent(video.url)}`;
             link.innerText = video.title;
-            videoLinksContainer.appendChild(link);
+            card.appendChild(link);
+
+            videoLinksContainer.appendChild(card);
         });
     </script>
 </body>
